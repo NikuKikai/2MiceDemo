@@ -4,10 +4,14 @@ using UnityEngine;
 using ManyMouseUnity;
 using System;
 
+public enum InputSource {
+    mouse0, mouse1, joystickL, joystickR
+}
+
 public class ViewControl : MonoBehaviour
 {
-    public int mouseId = 0;
-    public  float mouseSensitivity = 1f;
+    public InputSource inputSource = InputSource.mouse0;
+    public  float sensitivity = 1f;
     public Boolean dontAffectShoulder = true;
 
     ManyMouse mouse;
@@ -26,15 +30,27 @@ public class ViewControl : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    void Update()
+    {
+        if (inputSource == InputSource.joystickR) {
+            var h = Input.GetAxis("JoyRH") * 10000 * Time.deltaTime;
+            var v = -Input.GetAxis("JoyRV") * 10000 * Time.deltaTime;
+            UpdateDelta(new Vector2(h, v));
+        }
+    }
+
     private void InitManyMouse()
     {
-        Debug.Assert(ManyMouseWrapper.MouseCount > mouseId);
-        mouse = ManyMouseWrapper.GetMouseByID(mouseId);
-        mouse.OnMouseDeltaChanged += UpdateDelta;
+        if (inputSource == InputSource.mouse0 || inputSource == InputSource.mouse1){
+            var mouseId = inputSource == InputSource.mouse0? 0: 1;
+            Debug.Assert(ManyMouseWrapper.MouseCount > mouseId);
+            mouse = ManyMouseWrapper.GetMouseByID(mouseId);
+            mouse.OnMouseDeltaChanged += UpdateDelta;
+        }
     }
     private void UpdateDelta(Vector2 delta)
     {
-        delta = delta * mouseSensitivity * 0.01f; // * Time.deltaTime;
+        delta = delta * sensitivity * 0.01f; // * Time.deltaTime;
 
         xRotation -= delta.y;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
