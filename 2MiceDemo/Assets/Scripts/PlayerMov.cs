@@ -35,8 +35,7 @@ public class PlayerMov : MonoBehaviour
         // Move
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        var move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
+        InputDeltaXY(x, z);
 
         // Jump
         if (Input.GetButtonDown("Jump") && isGrounded) {
@@ -54,5 +53,11 @@ public class PlayerMov : MonoBehaviour
             isMoving = false;
         }
         lastPosition = gameObject.transform.position;
+    }
+
+    public void InputDeltaXY(float dx, float dy)
+    {
+        var move = transform.right * dx + transform.forward * dy;
+        controller.Move(move * speed * Time.deltaTime);
     }
 }
