@@ -123,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7880628632066668647}
-  - component: {fileID: 3181980400976640404}
+  - component: {fileID: 3952446060289236569}
   m_Layer: 0
   m_Name: Shoulder
   m_TagString: Untagged
@@ -148,7 +148,7 @@ Transform:
   - {fileID: 2617400331369968331}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3181980400976640404
+--- !u!114 &3952446060289236569
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,8 +160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b78c96d394f8cdc4ba63d9cf9ba3ac9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseId: 1
-  mouseSensitivity: 0.25
+  mouseId: 0
+  mouseSensitivity: 1
 --- !u!1 &3595829405146885168
 GameObject:
   m_ObjectHideFlags: 0

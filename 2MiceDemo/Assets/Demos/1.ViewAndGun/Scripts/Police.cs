@@ -70,7 +70,7 @@ public class Police : MonoBehaviour
     }
 
     bool CheckAimed() {
-        var v1 = player.GetComponentInChildren<Shoulder>().transform.forward;
+        var v1 = player.GetComponentInChildren<ShoulderControl>().transform.forward;
         var v2 = transform.position-player.position;
         v1.y /= 3; v2.y /= 3;
         var angle = Vector3.Angle(v1, v2);

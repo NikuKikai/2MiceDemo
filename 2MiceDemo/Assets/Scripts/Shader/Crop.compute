@@ -1,0 +1,36 @@
+#pragma kernel Crop
+
+// Input
+sampler2D Input;
+uint2 ModelInputSize;
+float2 P1;
+float2 P2;
+
+// Output
+RWStructuredBuffer<float> Output;
+
+[numthreads(8, 8, 1)]
+void Crop(uint2 id : SV_DispatchThreadID)
+{
+    // UV (vertically flipped)
+    float2 uv = float2(0.5 + id.x, ModelInputSize.y - 0.5 - id.y) / ModelInputSize;
+
+    // UV gradients
+    float2 duv_dx = float2(1.0 / ModelInputSize.x, 0);
+    float2 duv_dy = float2(0, -1.0 / ModelInputSize.y);
+
+    float2 roi_shape = P2 - P1;
+
+    float2 uv_ = uv * roi_shape + float2(P1.x, 1-P2.y);
+    float duv_dx_ = duv_dx * roi_shape.x;
+    float duv_dy_ = duv_dy * roi_shape.y;
+
+    // Texture sample
+    float3 rgb = tex2Dgrad(Input, uv_, duv_dx_, duv_dy_).rgb;
+
+    // Tensor element output
+    uint offs = (id.y * ModelInputSize.x + id.x) * 3;
+    Output[offs + 0] = rgb.r;
+    Output[offs + 1] = rgb.g;
+    Output[offs + 2] = rgb.b;
+}

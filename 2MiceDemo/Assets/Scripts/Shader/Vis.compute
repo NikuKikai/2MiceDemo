@@ -1,0 +1,61 @@
+#pragma kernel Vis
+
+// Input
+Texture2D<float4> Input;
+StructuredBuffer<float3> Marks;
+RWTexture2D<float4> Output;
+float2 P1;
+float2 P2;
+bool IsBG;
+
+
+[numthreads(8, 8, 1)]
+void Vis(uint3 id : SV_DispatchThreadID)
+{
+    uint2 srcSize;
+    Input.GetDimensions(srcSize.x, srcSize.y);
+    uint2 destSize;
+    Output.GetDimensions(destSize.x, destSize.y);
+
+    if(destSize.x <= id.x || destSize.y <= id.y)
+        return;
+
+    float2 roi_shape = (P2 - P1) * srcSize;
+
+    float2 sampleUnit = float2(float(srcSize.x) / destSize.x, float(srcSize.y) / destSize.y);
+
+    if (IsBG) {
+        Output[id.xy] = Input[min(uint2(sampleUnit.x * id.x, sampleUnit.y * id.y), srcSize)];
+    }
+    else {
+        Output[id.xy] = float4(0, 0, 0, 0);
+    }
+
+    // Draw rect
+    float2 p1 = float2(P1.x, 1-P1.y) * srcSize;
+    float2 p2 = float2(P2.x, 1-P2.y) * srcSize;
+    float2 idOnSrc = id.xy * sampleUnit;
+    if (idOnSrc.y >= p2.y && idOnSrc.y <= p1.y) {
+        if (abs(p1.x - idOnSrc.x) < 2) Output[id.xy] = float4(0, 1, 0, 1);
+        if (abs(p2.x - idOnSrc.x) < 2) Output[id.xy] = float4(0, 1, 0, 1);
+    }
+    if (idOnSrc.x >= p1.x && idOnSrc.x <= p2.x) {
+        if (abs(p1.y - idOnSrc.y) < 2) Output[id.xy] = float4(0, 1, 0, 1);
+        if (abs(p2.y - idOnSrc.y) < 2) Output[id.xy] = float4(0, 1, 0, 1);
+    }
+
+    // Draw marks
+    for (uint i = 0; i < 468; i++) {
+        float3 pt = Marks[i];
+        float px = pt.x / sampleUnit.x;
+        float py = (destSize.y - pt.y) / sampleUnit.y;
+        float dist2 = (px-id.x) * (px-id.x) + (py-id.y) * (py-id.y);
+        if (dist2 < 4) {
+            if (i == 93 || i == 323 || i == 4 || i == 10 || i == 152)
+                Output[id.xy] = float4(1, 0, 0, 1);
+            else
+                Output[id.xy] = float4(0, 0, 1, 1);
+            break;
+        }
+    }
+}
