@@ -949,14 +949,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba663d9d0e20dc488212ff8585e933c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
-  gravity: -19.6
-  jumpHeight: 3
-  groundCheck: {fileID: 2100943892}
-  groundDistance: 0.4
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!143 &1036112510
 CharacterController:
   m_ObjectHideFlags: 0
@@ -992,7 +984,7 @@ Transform:
   m_GameObject: {fileID: 1036112507}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.81009275, z: 0, w: 0.58630174}
-  m_LocalPosition: {x: 33.66, y: 2.51, z: 22.6}
+  m_LocalPosition: {x: 15.45, y: 2.51, z: 12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

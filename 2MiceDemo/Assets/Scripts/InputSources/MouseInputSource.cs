@@ -21,6 +21,8 @@ public class MouseInputSource : MonoBehaviour
         ManyMouseWrapper.OnInitialized += InitManyMouse;
     }
 
+    void Start() { Cursor.lockState = CursorLockMode.Locked; }
+
     void InitManyMouse()
     {
         if (ManyMouseWrapper.MouseCount <= mouseId) {
