@@ -12,22 +12,27 @@ using UnityEngine.Events;
 
 public class FaceInputSource : MonoBehaviour
 {
+    [Header("Callbacks")]
     [SerializeField] UnityEvent<Vector3> outputXYZ;
     [SerializeField] UnityEvent<Vector3> outputRotXYZ;
 
+    [Header("Setup")]
     [SerializeField] ImageSource imageSource = null;
     [SerializeField, Range(0, 1)] float detectThreshold = 0.5f;
     [SerializeField] ResourceSet detectResources = null;
 
     [SerializeField] NNModel markNNModel = null;
     [SerializeField] ComputeShader markCorpShader = null;
-
-    [SerializeField] float zOffset = -0.45f;
-    [SerializeField] float ryOffset = 0.04f;
-
     [SerializeField] bool visualize = false;
     [SerializeField] ComputeShader visShader = null;
     [SerializeField] RawImage visualizeDest;
+
+    [Header("Settings")]
+    [SerializeField][Tooltip("Zero point for moving (left/right, up/down, forward/backaward).")] Vector3 moveOffset = new Vector3(0, 0, -0.4f);
+    [SerializeField][Tooltip("Deadzone for moving (left/right, up/down, forward/backaward).")] Vector3 moveDeadzone = new Vector3(0.05f, 0, 0.03f);
+    [SerializeField][Tooltip("Zero point for rotation (yaw, pitch, roll).")] Vector3 rotateOffset = new Vector3(0, 0.04f, 0);
+    [SerializeField][Tooltip("Deadzone for rotation (yaw, pitch, roll).")] Vector3 rotateDeadzone = new Vector3(0.03f, 0.03f, 0.03f);
+
 
     // WebCam
     FaceDetector _detector;
@@ -130,16 +135,28 @@ public class FaceInputSource : MonoBehaviour
         var size = new Vector2(Mathf.Abs(left.x - right.x), Mathf.Abs(top.y - bottom.y));
         var center = new Vector2((left.x + right.x) / 2, (top.y + bottom.y) / 2);
 
-        var rx = - (nose.x * 2 - top.x - bottom.x) / size.x;
-        var ry = - (nose.y * 2 - left.y - right.y) / size.y + ryOffset;
-        var rz = (Mathf.Atan2(top.x-bottom.x, top.y-bottom.y) + Mathf.PI*5/2) % Mathf.PI - Mathf.PI/2;
+        var rx = - (nose.x * 2 - top.x - bottom.x) / size.x + rotateOffset.x;
+        var ry = - (nose.y * 2 - left.y - right.y) / size.y + rotateOffset.y;
+        var rz = (Mathf.Atan2(top.x-bottom.x, top.y-bottom.y) + rotateOffset.z + Mathf.PI*5/2) % Mathf.PI - Mathf.PI/2;
 
-        var px = - (center.x / imageW * 2 - 1);
-        var py = - (center.y / imageH * 2 - 1);
-        var pz = (size.y / imageH + zOffset) * 2f;
+        var px = - (center.x / imageW * 2 - 1) + moveOffset.x;
+        var py = - (center.y / imageH * 2 - 1) + moveOffset.y;
+        var pz = (size.y / imageH + moveOffset.z) * 2f;
+
+        // Deadzone
+        rx = ApplyDeadzone(rx, rotateDeadzone.x);
+        ry = ApplyDeadzone(ry, rotateDeadzone.y);
+        rz = ApplyDeadzone(rz, rotateDeadzone.z);
+        px = ApplyDeadzone(px, moveDeadzone.x);
+        py = ApplyDeadzone(py, moveDeadzone.y);
+        pz = ApplyDeadzone(pz, moveDeadzone.z);
         return (
             new Vector3(px, py, pz),
             new Vector3(rx, ry, rz)
         );
+    }
+
+    static float ApplyDeadzone(float x, float deadzone){
+        return Mathf.Sign(x) * Mathf.Max(0, Mathf.Abs(x) - deadzone);
     }
 }

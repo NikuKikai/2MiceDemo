@@ -7,9 +7,11 @@ using ManyMouseUnity;
 
 public class MouseInputSource : MonoBehaviour
 {
-    [SerializeField] UnityEvent<Vector3> outputXYZ;
-    [SerializeField] UnityEvent<int> outputButton;
     [SerializeField] int mouseId = 0;
+    [SerializeField] UnityEvent<Vector3> outputXYZ;
+    [SerializeField] UnityEvent<int> outputButtonDown;
+    [SerializeField] UnityEvent<int> outputButtonHold;
+    [SerializeField] UnityEvent<int> outputButtonUp;
 
 
     ManyMouse mouse;
@@ -23,6 +25,13 @@ public class MouseInputSource : MonoBehaviour
 
     void Start() { Cursor.lockState = CursorLockMode.Locked; }
 
+    void Update() {
+        if (mouse == null) return;
+        if (mouse.Button1) outputButtonHold.Invoke(0);
+        if (mouse.Button2) outputButtonHold.Invoke(1);
+        if (mouse.Button3) outputButtonHold.Invoke(2);
+    }
+
     void InitManyMouse()
     {
         if (ManyMouseWrapper.MouseCount <= mouseId) {
@@ -32,6 +41,7 @@ public class MouseInputSource : MonoBehaviour
         mouse = ManyMouseWrapper.GetMouseByID(mouseId);
         mouse.OnMouseDeltaChanged += OnMouseDeltaChanged;
         mouse.OnMouseButtonDown += OnMouseButtonDown;
+        mouse.OnMouseButtonUp += OnMouseButtonUp;
     }
 
     void OnMouseDeltaChanged(Vector2 v)
@@ -41,6 +51,11 @@ public class MouseInputSource : MonoBehaviour
 
     void OnMouseButtonDown(int button)
     {
-        outputButton.Invoke(button);
+        outputButtonDown.Invoke(button);
+    }
+
+    void OnMouseButtonUp(int button)
+    {
+        outputButtonUp.Invoke(button);
     }
 }

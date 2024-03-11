@@ -2740,6 +2740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c50278b4a9c33d4a9f07399b63a9915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseId: 0
   outputXYZ:
     m_PersistentCalls:
       m_Calls:
@@ -2755,10 +2756,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  outputButton:
+  outputButtonDown:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 846774380541623936}
+        m_TargetAssemblyTypeName: Gun, Assembly-CSharp
+        m_MethodName: Fire
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  outputButtonHold:
     m_PersistentCalls:
       m_Calls: []
-  mouseId: 0
+  outputButtonUp:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1458204923
 GameObject:
   m_ObjectHideFlags: 0
@@ -2803,6 +2821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c50278b4a9c33d4a9f07399b63a9915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mouseId: 1
   outputXYZ:
     m_PersistentCalls:
       m_Calls:
@@ -2818,22 +2837,15 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  outputButton:
+  outputButtonDown:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 846774380541623935}
-        m_TargetAssemblyTypeName: ShoulderControl, Assembly-CSharp
-        m_MethodName: InputButton
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  mouseId: 1
+      m_Calls: []
+  outputButtonHold:
+    m_PersistentCalls:
+      m_Calls: []
+  outputButtonUp:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1468926709
 GameObject:
   m_ObjectHideFlags: 0
@@ -4734,6 +4746,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b78c96d394f8cdc4ba63d9cf9ba3ac9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &846774380541623936 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2204524845725173507, guid: e2d6de906ee6c6142855fce588cedd07,
+    type: 3}
+  m_PrefabInstance: {fileID: 846774380541623934}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c55f0856b0b974baa9a9d163216806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8017441431717220242
