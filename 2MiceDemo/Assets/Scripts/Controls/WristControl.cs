@@ -34,7 +34,7 @@ public class WristControl : MonoBehaviour
     }
 
     // For mouse button input
-    public void InputDelta(int btn) {
+    public void InputButton(int btn) {
         if (btn == (side==Side.Left? 1: 0)) {
             pitch += pitchSpeed * 800 * Time.deltaTime;
             pitch = Mathf.Min(pitchMax, pitch);
@@ -43,5 +43,12 @@ public class WristControl : MonoBehaviour
             roll += rollSpeed * 800 * Time.deltaTime;
             roll = Mathf.Min(rollMax, roll);
         }
+    }
+    // For mouse move input
+    public void InputMove(Vector3 v) {
+        pitch += pitchSpeed * -v.y * Time.deltaTime;
+        pitch = Mathf.Clamp(pitch, pitchMin, pitchMax);
+        roll += rollSpeed * v.x * Time.deltaTime;
+        roll = Mathf.Clamp(roll, rollMin, rollMax);
     }
 }
